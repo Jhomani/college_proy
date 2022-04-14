@@ -1,9 +1,5 @@
-from .utils import * 
-
-# '-23x**2-2x-e**x+3'
-# 'x**3-x-1'
-# 'x**-2**-x'
-# 'e**x+2**-x+2cosx-6'
+from ..utils import isNum, applyFac, calcFunction 
+import math
 
 def function(expesion: str, var:str = '1'):
   comp = ''
@@ -14,6 +10,7 @@ def function(expesion: str, var:str = '1'):
 
   p_res = None
   p_fact = []
+  p_base = None
 
   for char in expesion:
     if char == ' ':
@@ -21,6 +18,11 @@ def function(expesion: str, var:str = '1'):
 
     if isNum(char):
       f_num += char
+    elif char == 'e':
+      if p_res == None:
+        t_fact.append(math.e)
+      else:
+        p_fact.append(math.e)
     elif char == 'x':
       if p_res == None:
         t_fact.append(float(var))
@@ -30,7 +32,9 @@ def function(expesion: str, var:str = '1'):
       if p_res != None:
         if f_num:
           p_fact.append(float(f_num))
-        if p_fact:
+        if p_fact and p_base != None:
+          p_base += applyFac(p_fact) 
+        if p_fact and comp != 'pow':
           p_res += applyFac(p_fact) 
 
         p_fact = [1] if char == '+' else [-1]
@@ -47,30 +51,28 @@ def function(expesion: str, var:str = '1'):
       if f_num:
         t_fact.append(float(f_num))
 
+      if comp == 'pow':
+        p_base = 0
+
       f_num = ''
       p_res = 0
     elif char == ',':
       if f_num:
         p_fact.append(float(f_num))
-      p_res += applyFac(p_fact) 
+      p_base += applyFac(p_fact) 
       f_num = ''
 
-      p_fact = [p_res]
-      p_res = 0 
+      p_fact = []
     elif char == ')':
-      first_parm = None
-
-      if comp in ['pow']:
-        first_parm = p_fact.pop(0)
-
       if f_num:
         p_fact.append(float(f_num))
       p_res += applyFac(p_fact) 
       f_num = ''
 
-      t_fact.append(calcFunction(comp, p_res, first_parm))
+      t_fact.append(calcFunction(comp, p_res, p_base))
 
       p_fact = []
+      p_base = None
       p_res = None
       comp = ''
     else:

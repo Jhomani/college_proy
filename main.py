@@ -1,6 +1,8 @@
-from calculation.index import function
+from src.about.biseccion import master
+from src.about.cubic import master_cub 
+from src.calculation.fun import function
+# func = input('Function: ')
+# print(function(func, 2))
 
-func=input("Enter the function: ")
-# err=input("Enter the error: ")
-
-print(function(func, 2))
+# master()
+master_cub()
