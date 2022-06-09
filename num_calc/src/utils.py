@@ -1,4 +1,4 @@
-from math import floor 
+from math import ceil, floor
 
 sub_nums = {
   0: '₀',
@@ -79,3 +79,22 @@ def calcFunction(fun: str, val: float, p_val = 1):
     res = val
   
   return res
+
+def my_round(num: float | int, decimals = 5):
+  aux_num = 1
+  num_decimals = decimals
+
+  while(num_decimals != 0):
+    aux_num *= 10
+    num_decimals -=1
+
+  num = num * aux_num
+  modul = (abs(num) % 1) * 10
+
+  if(modul >= 5):
+    num = ceil(num) if num > 0 else floor(num)
+  else:
+    num = floor(num) if num > 0 else ceil(num)
+
+  return round(num/aux_num, decimals)
+
